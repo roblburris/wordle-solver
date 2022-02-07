@@ -1,0 +1,6 @@
+{
+  "name": "Wordle Solver",
+  "description": "Solves Wordle puzzles as optimally as possible.",
+  "version": "1.0",
+  "manifest_version": 3
+}
