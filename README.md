@@ -1,2 +1,1 @@
-# wordle-solver
-test update
+ wordle-solver
