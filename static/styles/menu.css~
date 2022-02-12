@@ -1,0 +1,56 @@
+/*
+Remove text highlighting
+See https://github.com/electron/electron/issues/2538
+*/
+:not(input):not(textarea),
+:not(input):not(textarea)::after,
+:not(input):not(textarea)::before {
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+input,
+button,
+textarea,
+:focus {
+  outline: none;
+}
+
+html {
+  -webkit-app-region: drag;
+}
+
+body {
+  background-color: #333;
+  margin: 0;
+  width: 100px;
+}
+
+[class$="-menu-item"] {
+  height: 50px;
+  width: 50px;
+  float: left;
+  margin: 0;
+}
+
+[class$="-menu-item"]:hover {
+  background-color: rgb(41, 41, 41);
+}
+
+[class$="-menu-item"] img {
+  display: block;
+  margin: 10px auto 0 auto;
+
+  /* border: 1px pink solid; */
+}
+
+[class$="-menu-item"] p {
+  color: white;
+  font-size: 10px;
+  font-family: arial;
+  display: block;
+  text-align: center;
+  margin-top: 5px;
+
+  /* border: 1px lightskyblue solid; */
+}

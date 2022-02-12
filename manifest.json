@@ -1,6 +1,10 @@
 {
-  "name": "Wordle Solver",
-  "description": "Solves Wordle puzzles as optimally as possible.",
-  "version": "1.0",
-  "manifest_version": 3
+    "name": "Wordle Solver",
+    "description": "Solves Wordle puzzles as optimally as possible.",
+    "version": "1.0",
+    "manifest_version": 3,
+    "permissions": ["tabs", "scripting", "activeTab"],
+    "action": {
+        "default_popup": "static/menu.html"
+    }
 }

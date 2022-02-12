@@ -1,0 +1,13 @@
+let startButton = document.getElementById("start");
+
+startButton.addEventListener("click", async () => {
+    const currentTab = await chrome.tabs.query(
+        { active: true, currentWindow: true });
+
+    console.log(currentTab);
+});
+
+let startSolving = () => {
+    return;
+}
+

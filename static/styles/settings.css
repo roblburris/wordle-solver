@@ -1,0 +1,47 @@
+/*
+Remove text highlighting
+See https://github.com/electron/electron/issues/2538
+*/
+:not(input):not(textarea),
+:not(input):not(textarea)::after,
+:not(input):not(textarea)::before {
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+input,
+button,
+textarea,
+:focus {
+  outline: none;
+}
+
+body {
+  -webkit-app-region: drag;
+  background-color: #333;
+  margin: 0;
+  height: 420px;
+  width: 420px;
+  padding: 30px 0 0 30px;
+  overflow: hidden;
+}
+
+.line-container {
+  display: flex;
+  align-items: center;
+}
+
+input[type="checkbox"] {
+  transform: scale(1.5);
+}
+
+p {
+  color: white;
+  font-size: 20px;
+  font-family: arial;
+  margin-left: 10px;
+}
+
+input[type="number"] {
+  width: 30px;
+}

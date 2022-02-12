@@ -1,0 +1,46 @@
+/*
+Remove text highlighting
+See https://github.com/electron/electron/issues/2538
+*/
+:not(input):not(textarea),
+:not(input):not(textarea)::after,
+:not(input):not(textarea)::before {
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+input,
+button,
+textarea,
+:focus {
+  outline: none;
+}
+
+html {
+  -webkit-app-region: drag;
+}
+
+#subtitle-wrapper {
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+  min-height: 100vh;
+  background-color: red;
+  overflow-wrap: break-word;
+  position: absolute;
+  z-index: 99999999;
+  width: 100vh;
+  height: 200vh;
+}
+
+#subtitle {
+  display: inline-block;
+  padding: 0px 4px;
+  width: 100%;
+  /* inline-size: 150px; */
+  height: 100%;
+  color: white;
+  overflow-wrap: break-word;
+  font-size: 25vh;
+  /* border: 2px solid lightgreen; */
+}
