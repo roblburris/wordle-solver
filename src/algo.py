@@ -9,9 +9,8 @@ def main():
     sorted_counts = get_letter_counts(words)
     letters = [sorted_counts[x][0] for x in range(10)]
     # print(letters)
-    print(pick_best_starting_word(words, letters))
-    # print(word_checker(words, 'monad'))
-
+    # print(word_checker(words, 'toeas', 'toads'))
+    print(wordle_algo(words[rand.randint(0, len(words)-1)], words))
 
 '''
 Reads in all valid Wordle words from static/words.json
@@ -22,20 +21,7 @@ def load_words(path='C:\\Users\\clare\\Documents\\csprojects\\wordle-solver\\sta
     f = open(path).read()
     words = json.loads(f)['words']
     return words
-
-'''
-Plays the game of wordle as optimally as possible
-'''
-def wordle_algo(word, words):
-    # step 1: always play toeas
-    # guess = 'toeas'
-    # i = 1
-    # words_left_set = words.copy()
-    # while guess != word:
-    #     result = word_checker(guess)
-    #     for n in word_checker[0]:
-    #         # greens
-    pass       
+     
     
 
 
@@ -89,9 +75,8 @@ def pick_best_starting_word(words, letters):
 
 # returns whether each letter of a guessed word is in the correct index, in the wrong index, or not in the word 
 def word_checker(words, guess_word, word):
-    word = words[rand.randint(0, len(words)-1)]
+    # word = words[rand.randint(0, len(words)-1)]
     # word = 'money'
-
     # letters in right position, letters in wrong positions, letters not present
     green = []
     yellow = []
@@ -113,6 +98,7 @@ def word_checker(words, guess_word, word):
                     placeholder.append((guess[x], x))
         else:
             black.append((guess[x], x))
+    # format: green(letter, index)
 
     for n in placeholder:
         if [green[i][0] for i in range(len(green))].count(n[0]) <= word.count(n[0]):
@@ -125,22 +111,40 @@ def word_checker(words, guess_word, word):
     for n in green:
         possible_words = possible_words.intersection(set(filter(lambda x: x[n[1]] == n[0], possible_words)))
     for n in yellow:
-        possible_words = possible_words.intersection(set(filter(lambda x: n[0] not in x and x[n[1]] != n[0], possible_words)))
+        possible_words = possible_words.intersection(set(filter(lambda x: n[0] in x and x[n[1]] != n[0], possible_words)))
     for n in black:
         possible_words = possible_words.intersection(set(filter(lambda x: n[0] not in x, possible_words)))
     for n in black_edge_case:
-        possible_words = possible_words.intersection(set(filter(lambda x: x[n[1]] != n[0], possible_words)))
+        possible_words = possible_words.intersection(set(filter(lambda x: n[0] in x and x[n[1]] != n[0], possible_words)))        
+    return([[green, yellow, black, black_edge_case], possible_words])
 
-    return([green, yellow, black, black_edge_case])
     
     # guess_result is populated
     # first filter out words if we have correct letters in the right place
     # enemy e___, filter out all words that do not have an e at the start
     # remove all the words in words that do not contain the letters we have
 
-
-    
-
+'''
+Plays the game of wordle as optimally as possible
+'''
+def wordle_algo(word, words):
+    # step 1: always play toeas
+    guess = 'toeas'
+    i = 1
+    possible_words = set(words).copy()
+    while guess != word:
+        possible_words = word_checker(possible_words, guess, word)[1]
+        sorted_counts = get_letter_counts(possible_words)
+        if len(sorted_counts) >= 10:
+            letters = [sorted_counts[x][0] for x in range(10)]
+        else:
+            letters = [sorted_counts[x][0] for x in range(len(sorted_counts))]
+        print(f'{i}th guess: -----{guess}----- narrows the words down to {possible_words}. \n the word is {word}')
+        guess = pick_best_starting_word(possible_words, letters)[0]
+        i += 1
+    if guess == word:
+        print(f'{i}th guess: -----{guess}----- correctly identified {possible_words}. \n the word is {word}')
+        
 
 if __name__ == '__main__':
     main()
