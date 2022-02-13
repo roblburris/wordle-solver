@@ -7,16 +7,17 @@ def main():
     words = load_words()
     # print(len(words))
     sorted_counts = get_letter_counts(words)
-    letters = [sorted_counts[x][0] for x in range(10))]
+    letters = [sorted_counts[x][0] for x in range(10)]
     # print(letters)
-    pick_best_starting_word(words, letters)
-    print(word_checker(words, 'monad'))
+    print(pick_best_starting_word(words, letters))
+    # print(word_checker(words, 'monad'))
 
 
 '''
 Reads in all valid Wordle words from static/words.json
 '''
-def load_words(path='./static/words.json'):
+# def load_words(path='./static/words.json'):
+def load_words(path='C:\\Users\\clare\\Documents\\csprojects\\wordle-solver\\static\\words.json'):
     # open path (akak words.json) and read everything in path to a string
     f = open(path).read()
     words = json.loads(f)['words']
@@ -25,15 +26,16 @@ def load_words(path='./static/words.json'):
 '''
 Plays the game of wordle as optimally as possible
 '''
-def wordle_algo(word):
+def wordle_algo(word, words):
     # step 1: always play toeas
-    guess = 'toeas'
-    i = 1
-    while guess != word:
-        result = word_checker(guess)
-        for n in word_checker[0]:
-            # greens
-            
+    # guess = 'toeas'
+    # i = 1
+    # words_left_set = words.copy()
+    # while guess != word:
+    #     result = word_checker(guess)
+    #     for n in word_checker[0]:
+    #         # greens
+    pass       
     
 
 
@@ -73,20 +75,20 @@ def pick_best_starting_word(words, letters):
                         if q+w+e+r+t in words:
                             start_words.add(q+w+e+r+t)
 
-    min_word_narrowing_count = ('', 999999999)
+    max_word_coverage_count = ('', 0)
 
     for word in start_words:
-        words_left = words.copy()
+        words_left = set()
         for n in word:
-            words_left = words_left.intersection(set(filter(lambda x: n not in x, words)))
-        if len(words_left) < min_word_narrowing_count[1]:
-            min_word_narrowing_count = (word, len(words_left))
+            words_left = words_left.union(set(filter(lambda x: n in x, words)))
+        if len(words_left) > max_word_coverage_count[1]:
+            max_word_coverage_count = (word, len(words_left))
     
-    return(min_word_narrowing_count)
+    return(max_word_coverage_count)
             
 
 # returns whether each letter of a guessed word is in the correct index, in the wrong index, or not in the word 
-def word_checker(words, guess_word):
+def word_checker(words, guess_word, word):
     word = words[rand.randint(0, len(words)-1)]
     # word = 'money'
 
