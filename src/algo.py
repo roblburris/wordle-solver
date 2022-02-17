@@ -5,26 +5,32 @@ import random as rand
 
 def main():
     words = load_words()
-    # print(len(words))
+    print(len(words))
     sorted_counts = get_letter_counts(words)
     letters = [sorted_counts[x][0] for x in range(10)]
     # print(letters)
+    # best_starting_word = pick_best_starting_word(words, letters)
+    # print(best_starting_word)
     # print(word_checker(words, 'toeas', 'toads'))
-    print(wordle_algo('aroma', words))
+    # print(wordle_algo('aroma', words))
     # print(wordle_algo(words[rand.randint(0, len(words)-1)], words))
 
 '''
 Reads in all valid Wordle words from static/words.json
 '''
 # def load_words(path='./static/words.json'):
-def load_words(path='C:\\Users\\clare\\Documents\\csprojects\\wordle-solver\\static\\words.json'):
-    # open path (akak words.json) and read everything in path to a string
-    f = open(path).read()
-    words = json.loads(f)['words']
-    words.append('aroma')
-    return words
+# def load_words(path='C:\\Users\\clare\\Documents\\csprojects\\wordle-solver\\static\\words.json'):
+#     # open path (akak words.json) and read everything in path to a string
+#     f = open(path).read()
+#     words = set(json.loads(f)['words'])
+#     return words
      
-    
+# def load_words(path='./static/words.txt'):
+def load_words(path='C:\\Users\\clare\\Documents\\csprojects\\wordle-solver\\static\\words.txt'):
+    with open(path) as file:
+        words = [word.rstrip() for word in file]
+    file.close()
+    return words
 
 
 '''
