@@ -5,15 +5,19 @@ import random as rand
 
 def main():
     words = load_words()
-    print(len(words))
-    sorted_counts = get_letter_counts(words)
-    letters = [sorted_counts[x][0] for x in range(10)]
+    # print(len(words))
+
+    # sorted_counts = get_letter_counts(words)
+    # letters = [sorted_counts[x][0] for x in range(10)]
     # print(letters)
+
     # best_starting_word = pick_best_starting_word(words, letters)
     # print(best_starting_word)
-    # print(word_checker(words, 'toeas', 'toads'))
-    # print(wordle_algo('aroma', words))
-    # print(wordle_algo(words[rand.randint(0, len(words)-1)], words))
+
+    # print(word_checker('toeas', 'toads'))
+    
+    # print(wordle_algo('shake', words))
+    print(wordle_algo(words[rand.randint(0, len(words)-1)], words))
 
 '''
 Reads in all valid Wordle words from static/words.json
@@ -82,7 +86,7 @@ def pick_best_starting_word(words, letters):
             
 
 # returns whether each letter of a guessed word is in the correct index, in the wrong index, or not in the word 
-def word_checker(words, guess_word, word):
+def word_checker(guess, word):
     # word = words[rand.randint(0, len(words)-1)]
     # word = 'money'
     # letters in right position, letters in wrong positions, letters not present
@@ -92,7 +96,6 @@ def word_checker(words, guess_word, word):
     black_edge_case = []
     placeholder = []
 
-    guess = guess_word
     # check the chars update guess_result
     # x____, xax___
     for x in range(5):
@@ -116,8 +119,18 @@ def word_checker(words, guess_word, word):
             # example: guess: 'aargh', correct_word: 'aroma': second letter of 'aargh' is yellow b/c there is still an "unfound" 'a' at the end of 'aroma'
         else:
             black_edge_case.append(n)
-            # black_edge_case is when the letter at a particular index IS in the word, but at another index, and furthermore, has already been "greened"
+            # black_edge_case is when the letter at a particular index IS in the word, but at another index, and furthermore, has already been "greened"       
+    return([green, yellow, black, black_edge_case])
+    
 
+
+    # guess_result is populated
+    # first filter out words if we have correct letters in the right place
+    # enemy e___, filter out all words that do not have an e at the start
+    # remove all the words in words that do not contain the letters we have
+
+
+def word_set_narrower(words, green, yellow, black, black_edge_case):
     possible_words = set(words)
     for n in green:
         possible_words = possible_words.intersection(set(filter(lambda x: x[n[1]] == n[0], possible_words)))
@@ -128,34 +141,28 @@ def word_checker(words, guess_word, word):
         possible_words = possible_words.intersection(set(filter(lambda x: n[0] not in x, possible_words)))
     for n in black_edge_case:
         possible_words = possible_words.intersection(set(filter(lambda x: n[0] in x and x[n[1]] != n[0], possible_words)))        
-    return([[green, yellow, black, black_edge_case], possible_words])
-
-    
-    # guess_result is populated
-    # first filter out words if we have correct letters in the right place
-    # enemy e___, filter out all words that do not have an e at the start
-    # remove all the words in words that do not contain the letters we have
+    return(possible_words)
 
 '''
 Plays the game of wordle as optimally as possible
 '''
 def wordle_algo(word, words):
     # step 1: always play toeas
-    guess = 'aargh'
+    guess = 'toeas'
     i = 1
     possible_words = set(words).copy()
     while guess != word:
-        possible_words = word_checker(possible_words, guess, word)[1]
+        possible_words = word_set_narrower(possible_words, word_checker(guess, word)[0], word_checker(guess, word)[1], word_checker(guess, word)[2], word_checker(guess, word)[3],)
         sorted_counts = get_letter_counts(possible_words)
         if len(sorted_counts) >= 10:
             letters = [sorted_counts[x][0] for x in range(10)]
         else:
             letters = [sorted_counts[x][0] for x in range(len(sorted_counts))]
-        print(f'{i}th guess: -----{guess}----- ({word_checker(possible_words, guess, word)[0]}) narrows the words down to {possible_words} (n={len(possible_words)}). \n (the word is {word})')
+        print(f'{i}th guess: -----{guess}----- ({word_checker(guess, word)}) narrows the words down to {possible_words} (n={len(possible_words)}). \n (the word is {word})')
         guess = pick_best_starting_word(possible_words, letters)[0]
         i += 1
     if guess == word:
-        print(f'{i}th guess: -----{guess}----- correctly identified {possible_words}.')
+        print(f'{i}th guess: -----{guess}----- correctly identified {word}, out of {possible_words} left.')
         
 
 if __name__ == '__main__':
