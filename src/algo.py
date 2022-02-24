@@ -147,7 +147,6 @@ def word_set_narrower(words, green, yellow, black, black_edge_case):
 Plays the game of wordle as optimally as possible
 '''
 def wordle_algo(word, words):
-    # step 1: always play toeas
     guess = 'toeas'
     i = 1
     possible_words = set(words).copy()
